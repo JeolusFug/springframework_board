@@ -26,5 +26,16 @@
         </tr>
     </c:forEach>
 </table>
+<button onclick="writtingFn()">글쓰기</button>
+<button onclick="gopagingFn()">페이징 목록</button>
 </body>
+<script>
+    const writtingFn = () => {
+        const id = '${board.id}';
+        location.href="/board/save?id=" + id;
+    }
+    const gopagingFn = () => {
+        location.href="/board/paging/"
+    }
+</script>
 </html>

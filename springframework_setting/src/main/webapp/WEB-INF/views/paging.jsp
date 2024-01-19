@@ -63,12 +63,16 @@
         </c:otherwise>
     </c:choose>
     <button onclick="rewriteFn()">글쓰기</button>
+    <button onclick="nonpaging()">페이징 없는 목록</button>
 </div>
 </body>
 <script>
     const rewriteFn = () => {
         const id = '${board.id}';
         location.href="/board/save?id=" + id;
+    }
+    const nonpaging = () => {
+        location.href="/board/"
     }
 </script>
 </html>

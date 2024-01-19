@@ -31,6 +31,7 @@ public class BoardController {
         }
     }
 
+
     @GetMapping("/")
     public String findAll(Model model) {
         List<BoardDTO> boardDTOList = boardService.findAll();
@@ -52,7 +53,7 @@ public class BoardController {
     @GetMapping("/delete")
     public String delete(@RequestParam("id") Long id) {
         boardService.delete(id);
-        return "redirect:/board/";
+        return "redirect:/board/paging";
     }
 
     @GetMapping("/update")

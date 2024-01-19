@@ -18,6 +18,7 @@ public class BoardService {
         return boardRepository.save(boardDTO);
     }
 
+
     public List<BoardDTO> findAll() {
         return boardRepository.findAll();
     }
@@ -38,8 +39,8 @@ public class BoardService {
         boardRepository.update(boardDTO);
     }
 
-    int pageLimit = 3;  // 한 페이지당 보여줄 글 갯수
-    int blockLimit = 3; // 하단에 보여줄 페이지 번호 갯수
+    int pageLimit = 5;  // 한 페이지당 보여줄 글 갯수
+    int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
     public List<BoardDTO> pagingList(int page) {
         /*
             한페이지당 보여지는 글 갯수가 3일때

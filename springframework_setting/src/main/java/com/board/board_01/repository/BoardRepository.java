@@ -16,6 +16,7 @@ public class BoardRepository {
         return sql.insert("Board.save", boardDTO);
     }
 
+
     public List<BoardDTO> findAll() {
         return sql.selectList("Board.findAll");
     }
