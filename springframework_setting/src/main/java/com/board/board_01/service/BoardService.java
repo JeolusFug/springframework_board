@@ -1,11 +1,14 @@
 package com.board.board_01.service;
 
 import com.board.board_01.dto.BoardDTO;
+import com.board.board_01.dto.PageDTO;
 import com.board.board_01.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +36,42 @@ public class BoardService {
 
     public void update(BoardDTO boardDTO) {
         boardRepository.update(boardDTO);
+    }
+
+    int pageLimit = 3;  // 한 페이지당 보여줄 글 갯수
+    int blockLimit = 3; // 하단에 보여줄 페이지 번호 갯수
+    public List<BoardDTO> pagingList(int page) {
+        /*
+            한페이지당 보여지는 글 갯수가 3일때
+            1페이지를 요청하면 0, 2페이지를 요청하면 3, 3페이지를 요청하면 6 이 필요함
+         */
+        int pageStart = (page - 1) * pageLimit;
+        Map<String, Integer> pagingParams = new HashMap<>();
+        pagingParams.put("start", pageStart);
+        pagingParams.put("limit", pageLimit);
+        List<BoardDTO> pagingList = boardRepository.pagingList(pagingParams);
+
+        return pagingList;
+    }
+
+    public PageDTO pagingParam(int page) {
+        // 현재 글 갯수 조회
+        int boardCount = boardRepository.boardCount();
+        // 전체 페이지 갯수 계산
+        // Math.ceil = 올림처리 3.3333 -> 4
+        int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
+        // 시작 페이지 값 계산
+        int startPage = (((int)(Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+        // 끝 페이지 값 계산
+        int endPage = startPage + blockLimit - 1;
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPage(page);
+        pageDTO.setMaxPage(maxPage);
+        pageDTO.setStartPage(startPage);
+        pageDTO.setEndPage(endPage);
+        return pageDTO;
     }
 }

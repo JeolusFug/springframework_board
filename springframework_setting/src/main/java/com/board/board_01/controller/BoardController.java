@@ -1,6 +1,7 @@
 package com.board.board_01.controller;
 
 import com.board.board_01.dto.BoardDTO;
+import com.board.board_01.dto.PageDTO;
 import com.board.board_01.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class BoardController {
     public String save(@ModelAttribute BoardDTO boardDTO) {
         int saveResult = boardService.save(boardDTO);
         if (saveResult > 0) {
-            return "redirect:/board/";
+            return "redirect:/board/paging";
         } else {
             return "save";
         }
@@ -38,10 +39,13 @@ public class BoardController {
     }
 
     @GetMapping
-    public String findById(@RequestParam("id") Long id, Model model) {
+    public String findById(@RequestParam("id") Long id,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                           Model model) {
         boardService.updateHits(id);
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
+        model.addAttribute("page", page);
         return "detail";
     }
 
@@ -65,5 +69,22 @@ public class BoardController {
        model.addAttribute("board", dto);
        return "detail";
  //      return "redirect:/board?id="+boardDTO.getId();
+    }
+    
+    // 처음 페이지 요청은 1페이지를 보여줌
+    // required = false 는 필수가 아니라는 뜻
+    // /board/paging?page=2 라고오면 page 변수에는 2가 들어가고
+    // /board/paging?page 가 오면 page 변수에는 defaultValue = "1" 에 설정한 것 처럼 1이 들어옴
+    @GetMapping("/paging")
+    public String paging(Model model,
+                         @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+//        System.out.println("page = " + page);
+        // 해당 페이지에서 보여줄 글 목록
+        List<BoardDTO> pagingList = boardService.pagingList(page);
+//        System.out.println("pagingList = " + pagingList);
+        PageDTO pageDTO = boardService.pagingParam(page);
+        model.addAttribute("boardList", pagingList);
+        model.addAttribute("paging", pageDTO);
+        return "paging";
     }
 }
