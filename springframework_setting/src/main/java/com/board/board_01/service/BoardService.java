@@ -40,11 +40,15 @@ public class BoardService {
     }
 
     int pageLimit = 5;  // 한 페이지당 보여줄 글 갯수
+                        //　１ペイジにみせるぶんのかず
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
+                        //　したにみせるペイジばんごのかず
     public List<BoardDTO> pagingList(int page) {
         /*
             한페이지당 보여지는 글 갯수가 3일때
             1페이지를 요청하면 0, 2페이지를 요청하면 3, 3페이지를 요청하면 6 이 필요함
+            ひとつのペイジにみせるぶんのかずが３のとじ、
+            １ペイジをようせいすれば０，２ペイジをようせいすれば３，３ペイジをようせいすれば６がひつよう
          */
         int pageStart = (page - 1) * pageLimit;
         Map<String, Integer> pagingParams = new HashMap<>();
@@ -57,13 +61,18 @@ public class BoardService {
 
     public PageDTO pagingParam(int page) {
         // 현재 글 갯수 조회
+        //　げんざいぶんすうのしょうかい
         int boardCount = boardRepository.boardCount();
         // 전체 페이지 갯수 계산
         // Math.ceil = 올림처리 3.3333 -> 4
+        //　ぜんページすうのけいさん
+        //　Math.ceil = アップリプロセス
         int maxPage = (int) (Math.ceil((double) boardCount / pageLimit));
         // 시작 페이지 값 계산
+        //　はじまるページをけいさん
         int startPage = (((int)(Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
         // 끝 페이지 값 계산
+        //　さいごのページをけいさん
         int endPage = startPage + blockLimit - 1;
         if (endPage > maxPage) {
             endPage = maxPage;

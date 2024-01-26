@@ -1,8 +1,10 @@
 package com.board.board_01.controller;
 
 import com.board.board_01.dto.BoardDTO;
+import com.board.board_01.dto.CommentDTO;
 import com.board.board_01.dto.PageDTO;
 import com.board.board_01.service.BoardService;
+import com.board.board_01.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
+
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping("/save")
     public String saveForm() {
@@ -47,6 +51,8 @@ public class BoardController {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
         model.addAttribute("page", page);
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
         return "detail";
     }
 
@@ -76,11 +82,17 @@ public class BoardController {
     // required = false 는 필수가 아니라는 뜻
     // /board/paging?page=2 라고오면 page 변수에는 2가 들어가고
     // /board/paging?page 가 오면 page 변수에는 defaultValue = "1" 에 설정한 것 처럼 1이 들어옴
+    // さいしょのページのリクエストは1ページをひょうじ
+    // required = falseはひっすではないといういみ
+    // /board/paging?page=2がくるとpageへんすうには２がはいって
+    // /board/paging?pageがくろとpageへんすうひはdefaultValue = "1"にせっていしたように１がはいる
+
     @GetMapping("/paging")
     public String paging(Model model,
                          @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 //        System.out.println("page = " + page);
         // 해당 페이지에서 보여줄 글 목록
+        //　がいとうページでひょうじするぶんのリスト、もくろく
         List<BoardDTO> pagingList = boardService.pagingList(page);
 //        System.out.println("pagingList = " + pagingList);
         PageDTO pageDTO = boardService.pagingParam(page);
