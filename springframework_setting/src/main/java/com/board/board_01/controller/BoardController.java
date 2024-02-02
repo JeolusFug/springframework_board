@@ -1,3 +1,4 @@
+// 게시판용입니다. けいじばんようです
 package com.board.board_01.controller;
 
 import com.board.board_01.dto.BoardDTO;
@@ -5,11 +6,15 @@ import com.board.board_01.dto.CommentDTO;
 import com.board.board_01.dto.PageDTO;
 import com.board.board_01.service.BoardService;
 import com.board.board_01.service.CommentService;
+import com.board.member_01.dto.MemberDTO;
+import com.board.member_01.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.lang.reflect.Member;
 import java.util.List;
 
 @Controller
@@ -20,13 +25,17 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
 
+    // 글 작성기능, 작성 후 페이징 기능이 있는 목록으로 넘어감
+    // もじのさくせいきのう、さくせいごページングきのうがあるもくろくにうつる
     @GetMapping("/save")
     public String saveForm() {
         return "save";
     }
 
+    // 글 작성기능, 작성 후 페이징 기능이 있는 목록으로 넘어감
+    // もじのさくせいきのう、さくせいごページングきのうがあるもくろくにうつる
     @PostMapping("/save")
-    public String save(@ModelAttribute BoardDTO boardDTO) {
+    public String save(HttpSession session, @ModelAttribute BoardDTO boardDTO) {
         int saveResult = boardService.save(boardDTO);
         if (saveResult > 0) {
             return "redirect:/board/paging";
@@ -35,6 +44,24 @@ public class BoardController {
         }
     }
 
+    // 글 작성기능, 작성 후 페이징 기능이 없는 목록으로 넘어감
+    // もじのさくせいきのう、さくせいごページングきのうがないもくろくにうつる
+    @GetMapping("/save1")
+    public String save1Form() {
+        return "save1";
+    }
+
+    // 글 작성기능, 작성 후 페이징 기능이 없는 목록으로 넘어감
+    // もじのさくせいきのう、さくせいごページングきのうがないもくろくにうつる
+    @PostMapping("/save1")
+    public String save1(HttpSession session, @ModelAttribute BoardDTO boardDTO) {
+        int saveResult1 = boardService.save1(boardDTO);
+        if (saveResult1 > 0) {
+            return "redirect:/board/";
+        } else {
+            return "save1";
+        }
+    }
 
     @GetMapping("/")
     public String findAll(Model model) {

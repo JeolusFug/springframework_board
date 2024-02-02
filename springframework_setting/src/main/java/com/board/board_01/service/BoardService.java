@@ -1,3 +1,4 @@
+// 게시판용입니다. けいじばんようです
 package com.board.board_01.service;
 
 import com.board.board_01.dto.BoardDTO;
@@ -14,11 +15,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    // 페이징 기능이 있는 작성
+    // ページングきのうがあるさくせい
     public int save(BoardDTO boardDTO) {
         return boardRepository.save(boardDTO);
     }
 
-
+    // 페이징 기능이 없는 작성
+    // ページングきのうがないさくせい
+    public int save1(BoardDTO boardDTO) {
+        return boardRepository.save1(boardDTO);
+    }
     public List<BoardDTO> findAll() {
         return boardRepository.findAll();
     }
@@ -39,7 +46,7 @@ public class BoardService {
         boardRepository.update(boardDTO);
     }
 
-    int pageLimit = 5;  // 한 페이지당 보여줄 글 갯수
+    int pageLimit = 10;  // 한 페이지당 보여줄 글 갯수
                         //　１ペイジにみせるぶんのかず
     int blockLimit = 5; // 하단에 보여줄 페이지 번호 갯수
                         //　したにみせるペイジばんごのかず
@@ -84,4 +91,6 @@ public class BoardService {
         pageDTO.setEndPage(endPage);
         return pageDTO;
     }
+
+
 }

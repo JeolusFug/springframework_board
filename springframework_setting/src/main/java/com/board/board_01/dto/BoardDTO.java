@@ -1,3 +1,4 @@
+// 게시판용입니다. けいじばんようです
 package com.board.board_01.dto;
 
 import lombok.Getter;

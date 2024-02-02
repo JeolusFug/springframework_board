@@ -1,3 +1,4 @@
+// 게시판용입니다. けいじばんようです
 package com.board.board_01.repository;
 
 import com.board.board_01.dto.BoardDTO;
@@ -12,11 +13,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardRepository {
     private final SqlSessionTemplate sql;
+    // 페이징 기능이 있는 작성
+    // ページングきのうがあるさくせい
     public int save(BoardDTO boardDTO) {
         return sql.insert("Board.save", boardDTO);
     }
 
-
+    // 페이징 기능이 없는 작성
+    // ページングきのうがないさくせい
+    public int save1(BoardDTO boardDTO) {
+        return sql.insert("Board.save1", boardDTO);
+    }
     public List<BoardDTO> findAll() {
         return sql.selectList("Board.findAll");
     }
@@ -44,4 +51,6 @@ public class BoardRepository {
     public int boardCount() {
         return sql.selectOne("Board.boardCount");
     }
+
+
 }

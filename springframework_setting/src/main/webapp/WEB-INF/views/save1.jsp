@@ -2,10 +2,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>save</title>
+    <title>save1</title>
 </head>
 <body>
-<form action="/board/save" method="post">
+<form action="/board/save1" method="post">
     <input type="text" name="boardWriter" value="${loginEmail}"readonly>
     <input type="text" name="boardPass" placeholder="비밀번호">
     <input type="text" name="boardTitle" placeholder="제목">

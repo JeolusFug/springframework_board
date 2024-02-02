@@ -1,3 +1,4 @@
+// 게시판용입니다. けいじばんようです
 package com.board.board_01.repository;
 
 import com.board.board_01.dto.CommentDTO;
@@ -13,11 +14,16 @@ import java.util.List;
 public class CommentRepository {
     private final SqlSessionTemplate sql;
 
+
+
     public void save(CommentDTO commentDTO) {
         sql.insert("Comment.save", commentDTO);
     }
 
     public List<CommentDTO> findAll(Long boardId) {
         return sql.selectList("Comment.findAll", boardId);
+    }
+    public void commentdelete(Long id) {
+        sql.delete("Comment.delete", id);
     }
 }
