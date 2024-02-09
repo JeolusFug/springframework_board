@@ -35,4 +35,9 @@
     <select id="boardCount" resultType="Integer">
         select count(id) from board_table
     </select>
+    <!-- 페이징 기능이 없는 검색기능을 위한 Mapper. 처음은 제목만을 검색하기 위한 Mapper
+    　   　ページングきのうがないけんさくきのうのためのMapper。さいしょはタイトルだけをけんさくするためのMapper　-->
+    <select id="findAllSearch" resultType="board">
+        select * from board_table where boardTitle like concat('%', #{keyword}, '%') order by id desc
+    </select>
 </mapper>
