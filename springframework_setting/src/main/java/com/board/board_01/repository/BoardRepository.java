@@ -52,5 +52,9 @@ public class BoardRepository {
         return sql.selectOne("Board.boardCount");
     }
 
-
+    // 페이징 기능이 없는 검색기능, keyword를 함께 보냄
+    // ページングきのうがないけんさくきのう、keywordをいっしょにおくる
+    public List<BoardDTO> findAllSearch(String keyword) {
+        return sql.selectList("Board.findAllSearch", keyword);
+    }
 }

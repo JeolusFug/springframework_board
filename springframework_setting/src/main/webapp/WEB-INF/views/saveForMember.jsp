@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
 <body>
+<h2>회원가입</h2>
     <form action="/member/saveForMember" method="post">
         <input type="text" name="memberEmail" placeholder="이메일" id="memberEmail" onblur="emailCheckForMember()">
         <!-- onblur는 입력창을 벗어났을때 함수를 호출하도록 하는 이벤트 처리 방식 -->

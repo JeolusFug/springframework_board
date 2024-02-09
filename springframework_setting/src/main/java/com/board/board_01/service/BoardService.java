@@ -92,5 +92,9 @@ public class BoardService {
         return pageDTO;
     }
 
-
+    // 페이징 기능이 없는 검색기능, keyword를 함께 보냄
+    // ページングきのうがないけんさくきのう、keywordをいっしょにおくる
+    public List<BoardDTO> findAllSearch(String keyword) {
+        return boardRepository.findAllSearch(keyword);
+    }
 }

@@ -127,4 +127,25 @@ public class BoardController {
         model.addAttribute("paging", pageDTO);
         return "paging";
     }
+    
+    // 페이징이 없는 게시판의 검색기능을 위함
+    // ページングきのうがないけいじばんのけんさくきのうのため
+    @GetMapping("/listSearch")
+    public String findAll2(Model model,
+                           @RequestParam(value = "keyword", required = false) String keyword) {
+        List<BoardDTO> boardDTOList = boardService.findAll();
+        model.addAttribute("boardList", boardDTOList);
+        // jsp에서 keyword를 받아와 controller에서 사용
+        // jspでkeywordをうけとり、controllerでしよう
+        model.addAttribute("keyword", keyword);
+        
+        // 검색어인 keyword가 null이 아닐시 keyword를 포함한 list를 화면에 보여줌
+        // けんさくごであるkeywordがnullでないばあい、keywordをふくむlistをがめんによううじする
+        if (keyword != null) {
+            List<BoardDTO> boardDTOList1 = boardService.findAllSearch(keyword);
+            model.addAttribute("boardList", boardDTOList1);
+        }
+
+        return "listSearch";
+    }
 }

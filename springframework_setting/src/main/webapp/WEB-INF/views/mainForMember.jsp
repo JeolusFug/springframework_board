@@ -11,6 +11,8 @@
     <h2>게시판 바로가기</h2>
     <button onclick="gotononpboard()">페이징 없는 게시판 바로가기</button>
     <button onclick="gotopboard()">페이징 있는 게시판 바로가기</button>
+    <h2>검색 게시판 바로가기</h2>
+    <button onclick="gotosearchboard()">페이징 없는 검색 게시판 바로가기</button>
 </body>
 <script>
     const update = () => {
@@ -25,6 +27,9 @@
     }
     const gotopboard = () => {
         location.href = "/board/paging";
+    }
+    const gotosearchboard = () => {
+        location.href = "/board/listSearch";
     }
 </script>
 </html>

@@ -7,7 +7,19 @@
     <title>list</title>
 </head>
 <body>
-<h2>페이징 없는 게시판</h2>
+<h2>페이징 없는 검색 게시판</h2>
+<div>
+    <select name="searchType" id="searchType">
+        <option value="title">제목</option>
+        <option value="content">내용</option>
+        <option value="title_content">제목+내용</option>
+        <option value="writer">작성자</option>
+    </select>
+    <form id="search" action="/board/listSearch" method="get">
+        <input type="text" name="keyword" placeholder="검색어를 입력해주세요."/>
+        <button type="submit">검색</button>
+    </form>
+</div>
 <table>
     <tr>
         <th>id</th>

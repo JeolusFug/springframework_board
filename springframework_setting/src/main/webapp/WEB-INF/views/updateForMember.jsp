@@ -4,6 +4,7 @@
     <title>update</title>
 </head>
 <body>
+<h2>내 회원정보 수정하기</h2>
 <form action="/member/updateForMember" method="post" name="updateForm">
      id: <input type="text" name="id" value="${member.id}"readonly>
     email: <input type="text" name="memberEmail" value="${member.memberEmail}"readonly>

@@ -6,6 +6,7 @@
     <title>list</title>
 </head>
 <body>
+<h2>회원 목록 조회</h2>
 <table>
     <tr>
         <th>id</th>
@@ -14,7 +15,7 @@
         <th>name</th>
         <th>age</th>
         <th>mobile</th>
-        <th>조회</th>
+        <th>상세조회</th>
         <th>삭제</th>
     </tr>
     <c:forEach items="${memberList}" var="member">
@@ -29,7 +30,7 @@
             <td>${member.memberAge}</td>
             <td>${member.memberMobile}</td>
             <td>
-                <a href="/member?id=${member.id}">조회</a>
+                <a href="/member?id=${member.id}">상세조회</a>
             </td>
             <td>
                 <button onclick="deleteForMember('${member.id}')">삭제</button>

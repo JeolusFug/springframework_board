@@ -5,6 +5,7 @@
     <title>save</title>
 </head>
 <body>
+<h2>회원가입</h2>
 <form action="/board/save" method="post">
     <input type="text" name="boardWriter" value="${loginEmail}"readonly>
     <input type="text" name="boardPass" placeholder="비밀번호">
