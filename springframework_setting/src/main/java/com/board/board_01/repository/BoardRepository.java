@@ -54,7 +54,23 @@ public class BoardRepository {
 
     // 페이징 기능이 없는 검색기능, keyword를 함께 보냄
     // ページングきのうがないけんさくきのう、keywordをいっしょにおくる
-    public List<BoardDTO> findAllSearch(String keyword) {
-        return sql.selectList("Board.findAllSearch", keyword);
+    public List<BoardDTO> findAllSearch(Map<String, String> findtool) {
+        return sql.selectList("Board.findAllSearch", findtool);
+    }
+
+    // 검색 기능 작성 후 페이징 기능 작성
+    // けんさくきのうをさくせいしたあと、ページングきのうをさくせい
+    public List<BoardDTO> Search1(Map<String, Integer> SearchPaging1) {
+        return sql.selectList("Board.Search1", SearchPaging1);
+    }
+    public List<BoardDTO> Search2(Map<String, Object> SearchTool2) {
+        return sql.selectList("Board.Search2", SearchTool2);
+    }
+
+    public int PageSearchCount1() {
+        return sql.selectOne("Board.PageSearchCount1");
+    }
+    public int PageSearchCount2(Map<String, String> searchPagingTool) {
+        return sql.selectOne("Board.PageSearchCount2", searchPagingTool);
     }
 }

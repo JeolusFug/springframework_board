@@ -94,7 +94,77 @@ public class BoardService {
 
     // 페이징 기능이 없는 검색기능, keyword를 함께 보냄
     // ページングきのうがないけんさくきのう、keywordをいっしょにおくる
-    public List<BoardDTO> findAllSearch(String keyword) {
-        return boardRepository.findAllSearch(keyword);
+    public List<BoardDTO> findAllSearch(String keyword, String searchType) {
+        Map<String, String> findtool = new HashMap<>();
+        findtool.put("keyword", keyword);
+        findtool.put("searchType", searchType);
+        return boardRepository.findAllSearch(findtool);
+    }
+
+    // 검색 기능 작성 후 페이징 기능 작성
+    // けんさくきのうをさくせいしたあと、ページングきのうをさくせい
+    public List<BoardDTO> Search1(int page) {
+
+        int pageStart = (page - 1) * pageLimit;
+        Map<String, Integer> SearchPaging1 = new HashMap<>();
+        SearchPaging1.put("start", pageStart);
+        SearchPaging1.put("limit", pageLimit);
+
+        return boardRepository.Search1(SearchPaging1);
+    }
+
+    public List<BoardDTO> Search2(String keyword, String searchType, int page) {
+        int pageStart = (page - 1) * pageLimit;
+        Map<String, Object> SearchTool2 = new HashMap<>();
+        SearchTool2.put("keyword", keyword);
+        SearchTool2.put("searchType", searchType);
+        SearchTool2.put("start", pageStart);
+        SearchTool2.put("limit", pageLimit);
+
+        return boardRepository.Search2(SearchTool2);
+    }
+
+    public PageDTO PageSearchCount1(int page) {
+
+        int PageSearchCount1 = boardRepository.PageSearchCount1();
+        int maxPage = (int) (Math.ceil((double) PageSearchCount1 / pageLimit));
+        int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = startPage + blockLimit - 1;
+
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageDTO pageDTO1 = new PageDTO();
+        pageDTO1.setPage(page);
+        pageDTO1.setMaxPage(maxPage);
+        pageDTO1.setStartPage(startPage);
+        pageDTO1.setEndPage(endPage);
+
+        return pageDTO1;
+    }
+
+    public PageDTO PageSearchCount2(int page, String keyword, String searchType) {
+        Map<String, String> SearchPagingTool = new HashMap<>();
+        SearchPagingTool.put("keyword", keyword);
+        SearchPagingTool.put("searchType", searchType);
+
+        int PageSearchCount2 = boardRepository.PageSearchCount2(SearchPagingTool);
+
+        int maxPage = (int) (Math.ceil((double) PageSearchCount2 / pageLimit));
+        int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = startPage + blockLimit - 1;
+
+        if (endPage > maxPage) {
+            endPage = maxPage;
+        }
+
+        PageDTO pageDTO2 = new PageDTO();
+        pageDTO2.setPage(page);
+        pageDTO2.setMaxPage(maxPage);
+        pageDTO2.setStartPage(startPage);
+        pageDTO2.setEndPage(endPage);
+
+        return pageDTO2;
     }
 }

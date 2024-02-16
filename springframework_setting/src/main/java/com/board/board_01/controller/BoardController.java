@@ -132,20 +132,48 @@ public class BoardController {
     // ページングきのうがないけいじばんのけんさくきのうのため
     @GetMapping("/listSearch")
     public String findAll2(Model model,
-                           @RequestParam(value = "keyword", required = false) String keyword) {
+                           @RequestParam(value = "keyword", required = false) String keyword,
+                           @RequestParam(value = "searchType", required = false) String searchType) {
         List<BoardDTO> boardDTOList = boardService.findAll();
         model.addAttribute("boardList", boardDTOList);
         // jsp에서 keyword를 받아와 controller에서 사용
         // jspでkeywordをうけとり、controllerでしよう
         model.addAttribute("keyword", keyword);
+        model.addAttribute("searchType", searchType);
         
         // 검색어인 keyword가 null이 아닐시 keyword를 포함한 list를 화면에 보여줌
         // けんさくごであるkeywordがnullでないばあい、keywordをふくむlistをがめんによううじする
         if (keyword != null) {
-            List<BoardDTO> boardDTOList1 = boardService.findAllSearch(keyword);
+            List<BoardDTO> boardDTOList1 = boardService.findAllSearch(keyword, searchType);
             model.addAttribute("boardList", boardDTOList1);
         }
 
         return "listSearch";
+    }
+
+    // 검색 기능 작성 후 페이징 기능 작성
+    // けんさくきのうをさくせいしたあと、ページングきのうをさくせい
+    @GetMapping("/PagingAfterSearch")
+    public String PagingAfterSearch(Model model,
+                                    @RequestParam(value = "keyword", required = false) String keyword,
+                                    @RequestParam(value = "searchType", required = false) String searchType,
+                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchType", searchType);
+        if (keyword == null) {
+            List<BoardDTO> PagingAfterSearchDTO1 = boardService.Search1(page);
+            PageDTO pagingsearchDTO = boardService.PageSearchCount1(page);
+            model.addAttribute("pagingSearch", pagingsearchDTO);
+            model.addAttribute("boardList", PagingAfterSearchDTO1);
+        }
+        else {
+            List<BoardDTO> PagingAfterSearchDTO2 = boardService.Search2(keyword, searchType, page);
+            PageDTO pagingsearchDTO2 = boardService.PageSearchCount2(page, keyword, searchType);
+            model.addAttribute("pagingSearch", pagingsearchDTO2);
+            model.addAttribute("boardList", PagingAfterSearchDTO2);
+        }
+
+        return "PagingAfterSearch";
     }
 }

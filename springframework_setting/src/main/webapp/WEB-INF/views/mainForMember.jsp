@@ -13,6 +13,7 @@
     <button onclick="gotopboard()">페이징 있는 게시판 바로가기</button>
     <h2>검색 게시판 바로가기</h2>
     <button onclick="gotosearchboard()">페이징 없는 검색 게시판 바로가기</button>
+    <button onclick="gotosearchpagingboard()">검색 + 페이징 게시판 바로가기</button>
 </body>
 <script>
     const update = () => {
@@ -30,6 +31,9 @@
     }
     const gotosearchboard = () => {
         location.href = "/board/listSearch";
+    }
+    const gotosearchpagingboard = () => {
+        location.href = "/board/PagingAfterSearch";
     }
 </script>
 </html>
