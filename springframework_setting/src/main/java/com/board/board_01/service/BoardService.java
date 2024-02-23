@@ -167,4 +167,9 @@ public class BoardService {
 
         return pageDTO2;
     }
+    // 글 작성자와 현재 로그인한 ID가 동일한지 확인하기 위함
+    // ぶんのさくせいしゃとげんざいログインしたIDがどういつかかくにんするため
+    public BoardDTO checkWriter(Long id) {
+        return boardRepository.checkWriter(id);
+    }
 }

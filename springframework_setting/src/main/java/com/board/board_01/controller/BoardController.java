@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Member;
 import java.util.List;
@@ -35,7 +37,7 @@ public class BoardController {
     // 글 작성기능, 작성 후 페이징 기능이 있는 목록으로 넘어감
     // もじのさくせいきのう、さくせいごページングきのうがあるもくろくにうつる
     @PostMapping("/save")
-    public String save(HttpSession session, @ModelAttribute BoardDTO boardDTO) {
+    public String save(@ModelAttribute BoardDTO boardDTO) {
         int saveResult = boardService.save(boardDTO);
         if (saveResult > 0) {
             return "redirect:/board/paging";
@@ -54,7 +56,7 @@ public class BoardController {
     // 글 작성기능, 작성 후 페이징 기능이 없는 목록으로 넘어감
     // もじのさくせいきのう、さくせいごページングきのうがないもくろくにうつる
     @PostMapping("/save1")
-    public String save1(HttpSession session, @ModelAttribute BoardDTO boardDTO) {
+    public String save1(@ModelAttribute BoardDTO boardDTO) {
         int saveResult1 = boardService.save1(boardDTO);
         if (saveResult1 > 0) {
             return "redirect:/board/";
@@ -82,18 +84,44 @@ public class BoardController {
         model.addAttribute("commentList", commentDTOList);
         return "detail";
     }
-
+    // 글 작성자와 현재 로그인한 아이디가 같을 시 글 삭제 가능
+    // ぶんのさくせいしゃとげんざいログインしたIDがおなじばあい、ぶんをさくじょかのう
     @GetMapping("/delete")
-    public String delete(@RequestParam("id") Long id) {
-        boardService.delete(id);
-        return "redirect:/board/paging";
+    public String delete(@RequestParam("id") Long id,
+                         HttpSession session,
+                         HttpServletRequest request) {
+        BoardDTO boardDTO = boardService.checkWriter(id);
+        String Writer = boardDTO.getBoardWriter();
+        String loginId = (String) session.getAttribute("loginEmail");
+        // System.out.println("id = " + id + ", Writer = " + Writer + ", loginId = " + loginId);
+        if (Writer.equals(loginId)) {
+            boardService.delete(id);
+            request.setAttribute("msg", "삭제가 완료되었습니다.");
+            request.setAttribute("url", "/board/PagingAfterSearch");
+            return "alert";
+        } else {
+            request.setAttribute("msg", "작성자가 아닙니다.");
+            request.setAttribute("url", "/board?id=" + id);
+            return "alert";
+        }
     }
-
+    // 삭제 기능과 동일하게 수정
+    // さくじょきのうとどうようにしゅうせい
     @GetMapping("/update")
-    public String updateForm(@RequestParam("id") Long id, Model model) {
+    public String updateForm(@RequestParam("id") Long id, Model model,
+                             HttpSession session,
+                             HttpServletRequest request) {
         BoardDTO boardDTO = boardService.findById(id);
-        model.addAttribute("board", boardDTO);
-        return "update";
+        String Writer = boardDTO.getBoardWriter();
+        String loginId = (String) session.getAttribute("loginEmail");
+        if (Writer.equals(loginId)) {
+            model.addAttribute("board", boardDTO);
+            return "update";
+        } else {
+            request.setAttribute("msg", "작성자가 아닙니다.");
+            request.setAttribute("url", "/board?id=" + id);
+            return "alert";
+        }
     }
 
     @PostMapping("/update")

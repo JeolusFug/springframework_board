@@ -38,11 +38,16 @@
         </tr>
     </c:forEach>
 </table>
+<button onclick="gotoindex()">홈페이지</button>
 </body>
 <script>
     const deleteForMember = (id) => {
         console.log(id);
         location.href = "/member/deleteForMember?id="+id;
+    }
+
+    const gotoindex = () => {
+        location.href = "/";
     }
 </script>
 </html>

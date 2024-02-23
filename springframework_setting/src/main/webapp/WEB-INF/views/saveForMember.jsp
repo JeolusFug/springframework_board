@@ -7,7 +7,7 @@
 </head>
 <body>
 <h2>회원가입</h2>
-    <form action="/member/saveForMember" method="post">
+    <form action="/member/saveForMember" method="post" name="saveForm" onsubmit="return checkSave();">
         <input type="text" name="memberEmail" placeholder="이메일" id="memberEmail" onblur="emailCheckForMember()">
         <!-- onblur는 입력창을 벗어났을때 함수를 호출하도록 하는 이벤트 처리 방식 -->
         <!-- onblurはにゅうりょくウィンドウをはずれたときにかんすうをよびだすようにするイベントしょりほうしき -->
@@ -41,19 +41,21 @@
             // ようせいほうしき : post, url : "email-check", データ : email
             type : "post",
             url : "/member/email-check",
+            async : false,
             data : {
                 "memberEmail" : email
             },
             success: function(res) {
                 console.log("요청 성공", res);
-                if (res == "ok") {
-                    console.log("사용가능한 이메일 입니다.");
+                if (res == "nooneuse") {
+                    console.log("사용 가능한 이메일 입니다.");
                     checkResult.style.color = "green";
-                    checkResult.innerHTML = "사용가능한 이메일 입니다.";
+                    checkResult.innerHTML = "사용 가능한 이메일 입니다.";
                 } else {
+                    sameEmail = res;
                     console.log("이미 사용중인 이메일 입니다.");
                     checkResult.style.color = "red";
-                    checkResult.innerHTML = "이미 사용중인 이메일 입니다.";
+                    checkResult.innerHTML = "이미 사용 중인 이메일 입니다.";
 
                 }
             },
@@ -63,6 +65,34 @@
                 // このないようがみえるということは、やりとりがうまくいかなかったということ
             }
         });
+    }
+
+    const checkSave = () => {
+        let saveinputs = document.saveForm;
+        if (!saveinputs.memberEmail.value) {
+            alert("아이디를 입력해주세요.")
+            return false;
+        }
+        if (!saveinputs.memberPassword.value) {
+            alert("비밀번호를 입력해주세요.")
+            return false;
+        }
+        if (!saveinputs.memberName.value) {
+            alert("이름을 입력해주세요.")
+            return false;
+        }
+        if (!saveinputs.memberAge.value) {
+            alert("나이를 입력해주세요.")
+            return false;
+        }
+        if (!saveinputs.memberMobile.value) {
+            alert("전화번호를 입력해주세요.")
+            return false;
+        }
+        if (sameEmail !== "ok") {
+            alert("중복된 아이디 입니다.")
+            return false;
+        }
     }
 </script>
 </html>

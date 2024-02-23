@@ -61,9 +61,9 @@ public class MemberService {
             // "ok"와 "no"는 임의의 값, 변경 가능
             // IDをつかうひとがいなければ"ok"あれば"no"
             // "ok"と"no"はにんいのち、へんこうかのう
-            return "ok";
+            return "nooneuse";
         } else {
-            return "no";
+            return "someoneuse";
         }
     }
 }

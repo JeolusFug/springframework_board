@@ -73,4 +73,10 @@ public class BoardRepository {
     public int PageSearchCount2(Map<String, String> searchPagingTool) {
         return sql.selectOne("Board.PageSearchCount2", searchPagingTool);
     }
+
+    // 글 작성자와 현재 로그인한 ID가 동일한지 확인하기 위함
+    // ぶんのさくせいしゃとげんざいログインしたIDがどういつかかくにんするため
+    public BoardDTO checkWriter(Long id) {
+        return sql.selectOne("Board.checkForDelete", id);
+    }
 }
