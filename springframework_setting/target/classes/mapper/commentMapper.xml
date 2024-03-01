@@ -10,9 +10,15 @@
     </insert>
 
     <select id="findAll" parameterType="Long" resultType="comment">
-        select * from comment_table where boardId=#{boardId} order by id desc
+        select * from comment_table where boardId=#{boardId} order by commentid desc
     </select>
+    <!-- <delete id="commentdelete" parameterType="Long">
+        delete from comment_table where commentid=#{boardId}
+    </delete> -->
     <delete id="commentdelete" parameterType="Long">
-        delete from comment_table where id=#{boardId}
+        delete from comment_table where commentid=#{id}
     </delete>
+    <select id="findWriter" parameterType="Long" resultType="String">
+        select commentWriter from comment_table where commentid=#{id}
+    </select>
 </mapper>
