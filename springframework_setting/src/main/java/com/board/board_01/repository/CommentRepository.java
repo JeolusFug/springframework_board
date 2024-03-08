@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +25,22 @@ public class CommentRepository {
     public List<CommentDTO> findAll(Long boardId) {
         return sql.selectList("Comment.findAll", boardId);
     }
-    public void commentdelete(Long id) {
+
+    /* public void commentdelete(Long id) {
         sql.delete("Comment.delete", id);
+    } */
+
+    public void commentdelete(Long id) {
+        sql.delete("Comment.commentdelete", id);
+    }
+
+    public String findWriter(Long id) {
+        return sql.selectOne("Comment.findWriter", id);
+    }
+
+    // 수정만 하기 때문에 return이 없음
+    // しゅうせいするだけなのでreturnがない
+    public void commentupdate(Map<String, Object> updateTool) {
+        sql.update("Comment.commentUpdate", updateTool);
     }
 }
