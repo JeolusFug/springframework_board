@@ -21,4 +21,8 @@
     <select id="findWriter" parameterType="Long" resultType="String">
         select commentWriter from comment_table where commentid=#{id}
     </select>
+<!--    수정 기능을 위한 메퍼-->
+    <update id="commentUpdate" parameterType="java.util.HashMap">
+        update comment_table set commentContents=#{contents} where commentid=#{id}
+    </update>
 </mapper>
