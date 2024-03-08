@@ -62,13 +62,15 @@
         <c:forEach items="${commentList}" var="comment" varStatus="status">
             <!-- 반복 작업이 필요하기 때문에 forEach 구문을 사용 -->
             <!--　くりかえしさぎょうがひつようなため、forEachこうぶんをしようします -->
+            <!-- tr,td에 값을 넣어 기능 실행 시 사용할 수 있도록 수정 -->
+            <!-- tr、tdにあたいをいれてきのうじっこうじにしようできるようにしゅうせい -->
             <tr data-commentid="${comment.commentid}">
                 <!-- <td>${comment.commentid}</td> -->
-                <td>${comment.commentWriter}</td>
-                <td>${comment.commentContents}</td>
+                <td data-commentWriter="${comment.commentWriter}">${comment.commentWriter}</td>
+                <td data-commentContents="${comment.commentContents}">${comment.commentContents}</td>
                 <td>${comment.commentCreatedTime}</td>
                 <td><button class="comment-delete-btn">댓글 삭제</button></td>
-                <!-- <td><button id="comment-delete-btn" onclick="commentdelete()">댓글삭제</button></td> -->
+                <td><button class="comment-update-btn">댓글 수정</button></td>
             </tr>
         </c:forEach>
     </table>
@@ -119,6 +121,9 @@
                 // 삭제 버튼에 대한 클릭 이벤트 핸들러 다시 등록
                 // さくじょボタンへのクリックイベントハンドラのさいとうろく
                 attachDeleteEventHandlers();
+                // 수정 버튼에 대한 클릭 이벤트 핸들러 다시 등록
+                // しゅうせいボタンへのクリックイベントハンドラーのさいとうろく
+                attachUpdateEventHandlers();
             },
             error: function (request, status, error) {
                 console.log("code: " + request.status)
@@ -128,7 +133,11 @@
         });
     }
 
-
+    // 페이지 로드 시 삭제 버튼에 이벤트 핸들러 등록
+    // ページロードじにさくじょボタンにイベントハンドラをとうろく
+    document.addEventListener('DOMContentLoaded', () => {
+        attachDeleteEventHandlers();
+    });
     // 삭제 버튼에 대한 클릭 이벤트 핸들러 등록
     // さくじょボタンへのクリックイベントハンドラのとうろく
     function attachDeleteEventHandlers() {
@@ -167,6 +176,9 @@
                             // 삭제 버튼에 대한 클릭 이벤트 핸들러 다시 등록
                             // さくじょボタンへのクリックイベントハンドラのさいとうろく
                             attachDeleteEventHandlers();
+                            // 수정 버튼에 대한 클릭 이벤트 핸들러 다시 등록
+                            // しゅうせいボタンへのクリックイベントハンドラーのさいとうろく
+                            attachUpdateEventHandlers();
                         },
                         error: function (request, status, error) {
                             console.log("code: " + request.status)
@@ -186,11 +198,132 @@
         });
     }
 
+    // 수정 창 생성용 폼
+    // しゅうせいウィンドウさくせいようフォーム
+    const updateForm = () => {
+        document.querySelectorAll('.comment-update-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // 이전에 열려있던 모든 수정 창을 닫음
+                // いぜんひらいていたすべてのしゅうせいウィンドウをとじる
+                document.querySelectorAll('.updateinputFn').forEach(form => {
+                    form.remove();
+                });
+
+                const commentId = button.parentElement.parentElement.getAttribute('data-commentid');
+                const commentWriter = button.parentElement.parentElement.querySelector('td[data-commentWriter]').textContent;
+                const commentContents = button.parentElement.parentElement.querySelector('td[data-commentContents]').textContent;
+                // const commentWriter = button.parentElement.parentElement.querySelector('td:first-child').textContent;
+                // const commentContents = button.parentElement.parentElement.querySelector('td:nth-child(2)').textContent;
+                console.log("commentId = " + commentId + ", commentWriter = " + commentWriter + ", commentContents = " + commentContents)
+
+                const form = document.createElement('div');
+                form.classList.add('updateinputFn');
+                form.innerHTML = '<input type="hidden" id="update-id" value="' + commentId + '">'
+                form.innerHTML += '<input type="text" class="form-control update-comment-writer" value="' + commentWriter + '" readonly>'
+                form.innerHTML += '<input type="text" id="update-contents" value="' + commentContents + '">'
+                form.innerHTML += '<button type="button" id="Updatebtn" value="update-contents" onclick="CommentUpdate()">수정 완료</button>'
+                // form.innerHTML += '<input type="submit" value="update-contents" onblur="UpdateGo()">'
+                // 현재 클릭한 수정 버튼의 부모 요소인 <td> 뒤에 입력창 추가
+                // げんざいクリックしたしゅうせいボタンのおやようそである「td」のあとににゅうりょくウィンドウをついか
+                button.parentElement.insertAdjacentElement('afterend', form);
+            });
+        });
+    }
+
+    // 수정 창을 없애는 기능
+    // しゅうせいウィンドウをなくすきのう
+    const removeupdateForm = () => {
+        // document.querySelectorAll('.comment-update-btn').forEach(button => {
+        document.querySelectorAll('.updateinputFn').forEach(form => {
+            // 이전에 열려있던 모든 수정 창을 닫음
+            // いぜんひらいていたすべてのしゅうせいウィンドウをとじる
+            form.remove();
+        });
+        // button.innerHTML = "";
+        // button.addEventListener('click', () => {
+        //     const form = document.createElement('div');
+        //     form.classList.add('updateinputFn');
+        //     form.innerHTML = "";
+        // });
+        // });
+    }
+
     // 페이지 로드 시 삭제 버튼에 이벤트 핸들러 등록
     // ページロードじにさくじょボタンにイベントハンドラをとうろく
     document.addEventListener('DOMContentLoaded', () => {
-        attachDeleteEventHandlers();
+        attachUpdateEventHandlers();
     });
+    // 삭제 버튼에 대한 클릭 이벤트 핸들러 등록
+    // さくじょボタンへのクリックイベントハンドラのとうろく
+    function attachUpdateEventHandlers() {
+        document.querySelectorAll('.comment-update-btn').forEach(button => {
+            button.addEventListener('click', handleUpdate);
+        });
+    }
+
+    // 수정버튼 클릭시 작성자 확인
+    // しゅうせいボタンをクリックするとさくせいしゃのかくにん
+    function handleUpdate() {
+        const button = this;
+        const commentId = button.parentElement.parentElement.getAttribute('data-commentid');
+        $.ajax({
+            type: "POST",
+            url: "/comment/UpdateCheck",
+            data: {
+                commentId: commentId
+            },
+            dataType: "text",
+            success: function (res) {
+                // remove1();
+                if (res === "Same") {
+                    //console.log("11111111")
+                    // 작성자와 로그인 아이디가 일치할 시 수정 창을 보여줍니다.
+                    // さくせいしゃとログインIDがいっちするばあい、しゅうせいウィンドウがひょうじされます。
+                    updateForm(button);
+                } else{
+                    removeupdateForm();
+                    alert("댓글 작성자가 아닙니다.")
+                }
+            },
+            error: function (request, status, error) {
+                console.log("code: " + request.status)
+                console.log("message: " + request.responseText)
+                console.log("error: " + error);
+            }
+        });
+    }
+
+    // 실제 수정이 이루어지는 부분. 아이디 검사와 분리
+    // じっさいにしゅうせいがおこなわれるぶぶん。 IDけんさとぶんり
+    const CommentUpdate = () => {
+        const result1 = document.getElementById("update-contents").value;
+        const id1 = document.getElementById("update-id").value;
+        const board = '${board.id}';
+        console.log(result1);
+        console.log(id1);
+        $.ajax({
+            type: "post",
+            url: "/comment/update",
+            data: {
+                commentId: id1,
+                commentContents: result1,
+                boardId: board
+            },
+            dataType: "json",
+            success: function (commentList) {
+                console.log("작성성공");
+                updateCommentList(commentList);
+                attachDeleteEventHandlers();
+                attachUpdateEventHandlers();
+            },
+            error: function (request, status, error) {
+                console.log("code: " + request.status)
+                console.log("message: " + request.responseText)
+                console.log("error: " + error);
+            }
+        });
+    }
+
 
     const updateCommentList = (commentList) => {
         let output = "<table>";
@@ -199,12 +332,15 @@
         output += "<th>내용</th>";
         output += "<th>작성시간</th>";
 
+        // 각 tr, td에 값을 넣어 기능 사용 시 필요한 값을 구할 수 있도록 수정
+        // かくtr、tdにあたいをいれてきのうしようじにひつようなあたいをもとめることができるようにしゅうせい
         commentList.forEach(comment => {
-            output += "<tr>";
-            output += "<td>" + comment.commentWriter + "</td>";
-            output += "<td>" + comment.commentContents + "</td>";
+            output += "<tr data-commentid=" + comment.commentid + ">";
+            output += "<td data-commetnWriter=" + comment.commentWriter + ">" + comment.commentWriter + "</td>";
+            output += "<td data-commetnWriter=" + comment.commentContents + ">" + comment.commentContents + "</td>";
             output += "<td>" + comment.commentCreatedTime + "</td>";
-            output += '<td><button class="comment-delete-btn" data-commentid="' + comment.commentid + '">댓글 삭제</button></td>';
+            output += '<td><button class="comment-delete-btn">댓글 삭제</button></td>';
+            output += '<td><button class="comment-update-btn">댓글 수정</button></td>';
             output += "</tr>";
         });
 
